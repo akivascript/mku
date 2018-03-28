@@ -1,4 +1,4 @@
-(ns mku.core
+(ns reckoner.core
   (:gen-class))
 
 (defn -main
