@@ -37,12 +37,13 @@
   (into (sorted-map) (zipmap (map inc (range)) deck)))
 
 (def arythea
-  (assoc! (transient pacer)
-          ::hero :arythea
-          ::crystals ary/crystals
-          ::deck (make-deck ary/deck)
-          ::order 0
-          ::tactic 0))
+  (persistent!
+   (assoc! (transient pacer)
+           ::hero :arythea
+           ::crystals ary/crystals
+           ::deck (make-deck ary/deck)
+           ::order 0
+           ::tactic 0)))
 
 (def game
   {::turn 1})
@@ -56,6 +57,20 @@
 
   )
 
+(defn add-crystal
+  [crystals color]
+  (update crystals color inc))
+
+(defn add-deed
+  [deck color]
+  (let [card (inc (apply max (keys deck)))]
+    (conj deck {card color})))
+
+(defn end-round
+  [hero action-color spell-color]
+  (let [hero (update hero ::deck add-deed action-color)]
+    (update hero ::crystals add-crystal spell-color)))
+
 (defn draw
   [deck]
   (let [deck (if-not (nil? (some keyword? (keys deck)))
@@ -68,13 +83,19 @@
     {:color (get deck card)
      :deck (dissoc deck card)}))
 
-(defn play
-  [p]
-  (when (empty? (::deck p))
-    (end-turn p))
-  (let [{color :color deck :deck} (last (take 4 (iterate draw deck)))]
+(defn crystals
+  [crystals color]
+  (get crystals color))
 
-    )) 
+(defn play
+  [hero]
+  (let [deck (::deck hero)]
+    (when (empty? deck)
+      (end-turn hero))
+    (let [{color :color deck :deck} (last (take 4 (iterate draw deck)))]
+      (if (zero? (crystals (::crystals hero)))
+        (end-turn hero)
+        (assoc hero ::deck (last (take (inc crystals) (iterate draw deck))))))
 
 (defn init
   ([]
