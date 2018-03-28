@@ -6,11 +6,7 @@
    :blue :green :white :red :blue :white :green :red])
 
 (def crystals
-  [{::crystal :blue
-    ::count 0}
-   {::cyrstal :green
-    ::count 0}
-   {::crystal :red
-    ::count 2}
-   {::crystal :white
-    ::count 1}])
+  {:blue 0
+   :green 0
+   :red 2
+   :white 1})
