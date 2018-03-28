@@ -1,4 +1,4 @@
-(ns mku.core-test
+(ns reckoner.core-test
   (:require [clojure.test :refer :all]
             [mku.core :refer :all]))
 
