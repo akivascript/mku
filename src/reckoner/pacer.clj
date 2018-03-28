@@ -1,8 +1,8 @@
-(ns recokoner.dummy
+(ns recokoner.pacer
   (:require [clojure.spec.alpha :as s]))
 
 (s/def ::crystal #{:black :gold :blue :green :red :white})
-(s/def ::hero #{:Arythea :Goldyx :Norowas :Tovak :Wolfhawk})
+(s/def ::hero #{:arythea :goldyx :norowas :tovak :wolfhawk})
 (s/def ::order (s/and int? pos?))
 (s/def ::card (s/and pos? #(<= % 16)))
 (s/def ::deeds (s/and set? (s/coll-of ::card)))
